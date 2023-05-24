@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 let posts = []; // 1. 게시글 리스트로 사용할 posts에 빈 리스트 할당
 
-/**req.body를 사용하려면 json 미들웨어를 사용해야 함. 
+/**req.body를 사용하려면 jso 미들웨어를 사용해야 함. 
  * 사용하지 않으면 undefined로 반환
  */
 app.use(express.json()); // 2. json 미들웨어 활성화
