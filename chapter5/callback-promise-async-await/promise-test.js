@@ -1,7 +1,7 @@
 const DB = [];
 
 function saveDB(user){
-    const oldDBsize = DB.length;
+    const oldDBsize = DB.length + 1;
     DB.push(user);
     console.log(`save ${user.name} to DB`);
     return new Promise((resolve, reject) => { // 콜백 대신 Promise 객체 반환
@@ -29,13 +29,19 @@ function getResult(user){
 /**Promise 객체에만 then 사용 가능 */
 function registerByPromise(user){
     // 2. 비동기 호출이지만, 순서를 지켜서 실행
-    const result = saveDB(user).then(sendEmail).then(getResult).catch(error => new Error(error));
+    const result = saveDB(user)
+                    .then(sendEmail)
+                    .then(getResult)
+                    .catch(error => new Error(error))
+                    .finally(()=>console.log("완료!"));
     // 3. 아직 완료되지 않았으므로 지연(pending) 상태
     console.log(result);
     return result;
 }
 
 const myUser = {email:"yoojikol@gmail.com", password:"1234", name:"Janice"};
+//allResult = Promise.all([saveDB(myUser), sendEmail(myUser), getResult(myUser)]);
+//allResult.then(console.log);
 const result = registerByPromise(myUser);
 // 결과값이 Promise이므로 then() 메서드에 함수를 넣어서 결과값을 볼 수 있음
 result.then(console.log);
