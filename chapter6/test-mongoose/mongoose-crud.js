@@ -53,7 +53,7 @@ app.put('/person/:email', async(req, res)=>{
 });
 
 // 8. person 데이터 삭제하기
-app.delete('/person/:email', async() => {
+app.delete('/person/:email', async(req, res) => {
     await Person.deleteMany({email: req.params.email});
     res.send({success: true});
 });
