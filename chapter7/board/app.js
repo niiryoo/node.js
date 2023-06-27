@@ -4,7 +4,12 @@ const app = express();
 
 const mongodbConnection = require("./configs/mongodb-connection");
 
-app.engine("handlebars", handlebars.engine()); // 1. 템플릿 엔진으로 핸들바 등록
+app.engine(
+    "handlebars",
+    handlebars.create({ //1. 핸들바 생성 및 엔진 반환
+        helpers: require('./configs/handlebars-helpers'),
+    }).engine,
+); 
 app.set("view engine", "handlebars"); // 2. 웹페이지 로드 시 사용할 템플릿 엔진 설정
 app.set("views", __dirname + "/views"); // 3. 뷰 디렉터리를 views로 설정
 
