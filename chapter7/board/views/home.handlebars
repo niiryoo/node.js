@@ -3,8 +3,8 @@
 <h2>{{title}}</h2> <!-- 1. 타이틀 영역 -->
 
 <!-- 2. 검색어 영역 -->
-<input type="text" name="search" id="search" value="" size="50" placeholder="검색어를 입력하세요."/>
-<button>검색</button>
+<input type="text" name="search" id="search" value="{{search}}" size="50" placeholder="검색어를 입력하세요."/> {{!-- 1. value에 검색어 데이터 삽입--}}
+<button onclick="location.href=`/?search=${document.getElementById('search').value}`">검색</button> {{!--2. 버튼 클릭 시 search 변수에 검색어 데이터를 담아서 서버로 보냄--}}
 <br>
 
 <!-- 3. 글쓰기 페이지 이동 링크 -->
