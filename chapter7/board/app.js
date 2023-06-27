@@ -11,8 +11,12 @@ app.get("/", (req, res) => {
     res.render("home", {title: "테스트 게시판", message: "만나서 반갑습니다! "});
 });
 
-app.get('/wrtie',(req, res) => {
+app.get('/write',(req, res) => {
     res.render("write", {title: "테스트 게시판"});
+});
+
+app.get('/detail/:id', async(req, res)=>{
+    res.render("detail",{title: "테스트 게시판"});
 });
 
 app.listen(3000);
