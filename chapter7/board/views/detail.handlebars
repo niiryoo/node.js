@@ -1,16 +1,17 @@
 <h1>{{title}}</h1>
-<h2 class="text-xl">제목입니다.</h2>
+{{#with post}} <!-- 1. post 객체를 쉽게 사용하도록 with로 감싸기 -->
+<h2 class="text-xl">{{title}}</h2> <!-- 2. 제목-->
 <div>
-    작성자 :<b>작성자 이름</b>
+    작성자 :<b>{{writer}}</b> <!-- 3. 작성자 -->
 </div>
 <div>
-    조회수 : 9999 | 작성 일시 : 2022-01-01 00:00:00
+    조회수 : {{hits}} | 작성 일시 : {{dataString createdDt}} <!-- 4 조회수 및 작성일 -->
     <button onclick="modifyPost()">수정</button>
     <button onclick="deletePost()">삭제</button>
 </div>
 
 <div>
-    <pre>본문입니다. 호이호이</pre>
+    <pre>{{content}}</pre>
 </div>
 
 <section>
@@ -47,9 +48,15 @@
         <pre>{{comment}}</pre>
     </div>
 </section>
+{{/with}}
 
 <footer>
     <div>
         <a href="/">목록으로</a>
     </div>
 </footer>
+
+<script>
+    async function modifyPost() {}
+    async function deletePost() {}
+</script>
