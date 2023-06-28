@@ -48,6 +48,7 @@ app.get("/", async(req, res) => {
 app.get('/write',(req, res) => {
     res.render("write", {title: "테스트 게시판"});
 });
+
 //글쓰기
 app.post('/write', async(req, res) => {
     const post = req.body;
@@ -65,4 +66,20 @@ app.get('/detail/:id', async(req, res)=>{
         title: "테스트 게시판",
         post: result.value,
     });
+});
+
+//패스워드 체크
+// 1. id, password 값을 가져옴
+app.post("/check-password", async(req, res)=>{
+    const {id, password} = req.body;
+
+    // 2. postService의 getPostByIdAndPassword() 함수를 사용해 게시글 데이터 확인
+    const post = await postService.getPostByIdAndPassword(collection, {id, password});
+    
+    //데이터가 있으면 isExist true, 없으면 isExist false
+    if (!post){
+        return res.status(400).json({isExist: false});
+    } else{
+        return res.json({isExist: true});
+    }
 });
