@@ -18,9 +18,20 @@ app.engine(
 app.set("view engine", "handlebars"); // 2. 웹페이지 로드 시 사용할 템플릿 엔진 설정
 app.set("views", __dirname + "/views"); // 3. 뷰 디렉터리를 views로 설정
 
-// 4. 라우터 설정
-app.get("/", (req, res) => {
-    res.render("home", {title: "테스트 게시판", message: "만나서 반갑습니다! "});
+// 4. 라우터 설정, 리스트 페이지
+app.get("/", async(req, res) => {
+    const page = parseInt(req.query.page) || 1; // 1.현재 페이지 데이터
+    const search = req.query.search || ""; // 검색어 데이터
+    try{
+        // 2. postServie.list에서 글 목록과 페이지네이터를 가져옴
+        const [posts, paginator] = await postService.list(collection, page, search);
+
+        // 3. 리스트 페이지 렌더링
+        res.render("home", {title: "테스트 게시판", search, paginator, posts});
+    } catch(error){
+        console.log(error);
+        res.render("home", {title: "테스트 게시판"});
+    }
 });
 
 //글쓰기 페이지 이동
