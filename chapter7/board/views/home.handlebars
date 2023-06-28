@@ -25,17 +25,17 @@
         <tbody> <!-- 1. 게시글 데이터 표시 -->
             {{#each posts}}
             <tr>
-                <td><a href="/detail/{{_id}}">{{title}}</a></td> <!-- 상세페이지 링크 -->
-                <td>{{writer}}</td>
-                <td>{{hits}}</td>
-                <td>{{dataString createdDt}}</td> <!-- 2. dataString 헬퍼 함수 사용 -->
+                <td align="center"><a href="/detail/{{_id}}">{{title}}</a></td> <!-- 상세페이지 링크 -->
+                <td align="center">{{writer}}</td>
+                <td align="center">{{hits}}</td>
+                <td align="center">{{dataString createdDt}}</td> <!-- 2. dataString 헬퍼 함수 사용 -->
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
 
-<!--페이징 영역-->ㅋ
+<!--페이징 영역-->
 <div>
     {{#with paginator}} <!-- 3. with 내장 헬퍼 함수 사용 -->
     <!-- 4. @root 서버의 원본 참조 시 사용 -->
@@ -43,7 +43,7 @@
     {{#if hasPrev}}
     <a href="/?page={{prevPage}}&search={{@root.search}}">&lt;</a>
     <!-- 6. 1페이지인 경우 이전 페이지가 없으므로 링크가 없음-->
-    {else}
+    {{else}}
     <a>&lt;</a>
     {{/if}}
     {{#each pageList}}
