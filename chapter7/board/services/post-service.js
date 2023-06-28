@@ -1,5 +1,6 @@
 // 글쓰기
 const paginator = require('../utils/paginator');
+const {ObjectId} = require('mongodb');
 
 // 글 목록
 async function list(collection, page, search){
@@ -34,8 +35,24 @@ async function writePost(collection, post){ // 1. 글쓰기 함수
     return await collection.insertOne(post); // 3. 몽고디비에 post를 저장 후 결과 반환
 }
 
+// 1. 패스워드는 노출 할 필요가 없으므로 결괏값으로 가져오지 않음
+const projectionOption = {
+    projection: {
+        // 프로젝트(투영) 결괏값에서 일부만 가져올 때 사용
+        password: 0, // 패스워드만 항목에서 빼는 프로젝션 설정.
+        "comments.password" : 0,
+    }
+}
+
+async function getDetailPost(collection, id){
+    // 2. 몽고디비 Collection의s findOneAndUpdate() 함수를 사용
+    // 게시글을 읽을 때마다 hits를 1 증가 {$inc: {hits: 1}}
+    return await collection.findOneAndUpdate({_id: ObjectId(id)}, { $inc: {hits: 1} }, projectionOption);
+}
+
 
 module.exports= { // 4.require()로 파일을 임포트 시 외부로 노출하는 객체
     list,
     writePost,
+    getDetailPost,
 };

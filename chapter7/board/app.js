@@ -18,6 +18,16 @@ app.engine(
 app.set("view engine", "handlebars"); // 2. 웹페이지 로드 시 사용할 템플릿 엔진 설정
 app.set("views", __dirname + "/views"); // 3. 뷰 디렉터리를 views로 설정
 
+let collection;
+app.listen(3000, async()=>{
+    console.log("Server started");
+    // 2. mongodbConnection()의 결과는 mongoClient
+    const mongoClient = await mongodbConnection();
+    // 3.mongoClient.db()로 디비 선택 collection()으로 컬렉션 선택 후 collection에 할당
+    collection = mongoClient.db().collection("post");
+    console.log("MongoDB connected");
+});
+
 // 4. 라우터 설정, 리스트 페이지
 app.get("/", async(req, res) => {
     const page = parseInt(req.query.page) || 1; // 1.현재 페이지 데이터
@@ -47,16 +57,12 @@ app.post('/write', async(req, res) => {
     res.redirect(`/detail/${result.insertedId}`);
 });
 
+// 상세 페이지로 이동
 app.get('/detail/:id', async(req, res)=>{
-    res.render("detail",{title: "테스트 게시판"});
-});
-
-let collection;
-app.listen(3000, async()=>{
-    console.log("Server started");
-    // 2. mongodbConnection()의 결과는 mongoClient
-    const mongoClient = await mongodbConnection();
-    // 3.mongoClient.db()로 디비 선택 collection()으로 컬렉션 선택 후 collection에 할당
-    collection = mongoClient.db().collection("post");
-    console.log("MongoDB connected");
+    // 1. 게시글 정보 가져오기
+    const result = await postService.getDetailPost(collection, req.params.id);
+    res.render("detail", {
+        title: "테스트 게시판",
+        post: result.value,
+    });
 });
