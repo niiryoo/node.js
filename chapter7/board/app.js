@@ -90,16 +90,19 @@ app.delete("/delete", async(req, res) => {
     const { id, password} = req.body;
     try{
         // 1. collection의 deleteOne를 사용해 게시글 하나를 삭제
-        const result = await collection.deleteOne({_id:ObjectId(id), password: password});
+        const result = await collection.deleteOne({
+            _id:ObjectId(id),
+            password: password,
+        });
         // 2.삭제 결과가 잘 못된 경우의 처리
-        if(result.deleteCount !== 1){ // .deleteOne의 결과는 deleteCount의 반환 (deleteCount가 1이면 성공, 아니면 실패)
+        if(result.deletedCount !== 1){ // .deleteOne의 결과는 deletedCount의 반환 (deleteCount가 1이면 성공, 아니면 실패)
             console.log("삭제 실패");
             return res.json({isSuccess: false});
         }
         return res.json({isSuccess: true});
     } catch (error){
         // 3. 에러가 난 경우의 처리
-        console.log(error);
+        console.error(error);
         return res.json({isSuccess: false});
     }
 });
@@ -126,7 +129,7 @@ app.post("/check-password", async(req, res)=>{
     
     //데이터가 있으면 isExist true, 없으면 isExist false
     if (!post){
-        return res.status(400).json({isExist: false});
+        return res.status(404).json({isExist: false});
     } else{
         return res.json({isExist: true});
     } 

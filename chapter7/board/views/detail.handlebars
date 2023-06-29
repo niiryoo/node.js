@@ -96,7 +96,7 @@
     }
     async function deletePost() {
         // 1. 프롬프트로 값 입력 받기
-        const password = promt("삭제하려면 패스워드를 입력해주세요");
+        const password = prompt("삭제하려면 패스워드를 입력해주세요");
         // 프롬프트에서 취소를 누른 경우 처리
         if(!password){
             return;
@@ -104,7 +104,7 @@
         // 2. fetch API를 사용해 delete API 호출
         const result = await fetch("/delete", {
             ...deleteOption,
-            body: JSON.stringify({id:"{{post._id}}", password})
+            body: JSON.stringify({ id:"{{post._id}}", password})
         });
 
         // 3. delete API의 결과에 따라 다른 메시지 출력
