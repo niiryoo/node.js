@@ -5,6 +5,7 @@ const { ObjectId } = require("mongodb");
 
 const app = express();
 const postService = require('./services/post-service'); // 1. 서비스 파일 로딩
+const { Collection } = require("mongoose");
 
 //POST 메서드 사용 시, 데이터를 req.body로 넘기는데, 해당 데이터를 사용하려면 express 미들웨어를 설정해야 함
 app.use(express.json());
@@ -86,6 +87,22 @@ app.post("/modify/", async(req, res) => {
     res.redirect(`/detail/${id}`);
 });
 
+//패스워드 체크
+// 1. id, password 값을 가져옴
+app.post("/check-password", async(req, res)=>{
+    const {id, password} = req.body;
+
+    // 2. postService의 getPostByIdAndPassword() 함수를 사용해 게시글 데이터 확인
+    const post = await postService.getPostByIdAndPassword(collection, {id, password});
+    
+    //데이터가 있으면 isExist true, 없으면 isExist false
+    if (!post){
+        return res.status(404).json({isExist: false});
+    } else{
+        return res.json({isExist: true});
+    } 
+});
+
 app.delete("/delete", async(req, res) => {
     const { id, password} = req.body;
     try{
@@ -119,18 +136,32 @@ app.get('/detail/:id', async(req, res)=>{
     });
 });
 
-//패스워드 체크
-// 1. id, password 값을 가져옴
-app.post("/check-password", async(req, res)=>{
-    const {id, password} = req.body;
+// 댓글 추가
+app.post("/write-comment", async(req, res)=>{
+    const {id, name, password, comment} = req.body; // 1. body에서 데이터를 가져오기
+    const post = await postService.getPostById(collection, id); // 2. id로 게시글 정보 가져오기
 
-    // 2. postService의 getPostByIdAndPassword() 함수를 사용해 게시글 데이터 확인
-    const post = await postService.getPostByIdAndPassword(collection, {id, password});
-    
-    //데이터가 있으면 isExist true, 없으면 isExist false
-    if (!post){
-        return res.status(404).json({isExist: false});
+    if(post.comments){
+        post.comments.push({
+            idx: post.comments.length + 1,
+            name,
+            password,
+            comment,
+            createdDt: new Date().toISOString(),
+        });
     } else{
-        return res.json({isExist: true});
-    } 
+        // 4. 게시글에 댓글 정보가 없으면 리스트에 댓글 정보 추가
+        post.comments = [
+            {
+                idx: 1,
+                name,
+                password,
+                comment,
+                createdDt: new Date().toISOString(),
+            },
+        ];
+    }
+    // 5. 업데이트하기. 업데이트 후에는 상세페이지로 다시 리다이렉트
+    postService.updatePost(collection, id, post);
+    return res.redirect(`/detail/${id}`);
 });

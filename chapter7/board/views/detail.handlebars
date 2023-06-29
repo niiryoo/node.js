@@ -5,7 +5,7 @@
     작성자 :<b>{{writer}}</b> <!-- 3. 작성자 -->
 </div>
 <div>
-    조회수 : {{hits}} | 작성 일시 : {{dataString createdDt}} <!-- 4 조회수 및 작성일 -->
+    조회수 : {{hits}} | 작성 일시 : {{dateString createdDt}} <!-- 4 조회수 및 작성일 -->
     <button onclick="modifyPost()">수정</button>
     <button onclick="deletePost()">삭제</button>
 </div>
@@ -16,37 +16,44 @@
 
 <section>
     <div>
-        <h3>3개의 댓글이 있습니다.</h3>
+        <!-- 1. 댓글 개수 보여주기 -->
+        <h3>{{lengthOfList comments}}개의 댓글이 있습니다.</h3>
     </div>
 
-    <form method="post" action="write-comment">
+    <!-- 2. 댓글 작성 시 API 호출 정보-->
+    <form method="post" action="/write-comment">
+        <input type="hidden" name="id" value="{{_id}}"> <!-- 3. 게시글의 _id -->
         <div>
             <div>
-                <input type="text" name="name" placeholder="이름">
-                <input type="password" name="password" placeholder="비밀번호">
+                <input type="text" name="name" placeholder="이름"> <!--작성자 입력란 -->
+                <input type="password" name="password" placeholder="비밀번호"> <!--비밀번호 입력한 -->
             </div>
         </div>
         
         <div>
-            <textarea cols="40" rows="3" name="content" placeholder="댓글을 입력해주세요."></textarea>
+            <!-- 4. 댓글 입력란 -->
+            <textarea cols="40" rows="3" name="comment" placeholder="댓글을 입력해주세요."></textarea>
             <br><br> <button>댓글 쓰기</button> <!--type을 submit으로 주면 화면이 갱신되므로 일반 버튼으로 선언. Ajax로 작성 예정-->
         </div>
     </form>
 </section>
 
 <section>
+    <!-- 5. 댓글 표시 영역 -->
+    {{#each comments}}
     <div>
         <div>
-            작성자 : <b>댓글 작성자</b>
+            작성자 : <b>{{name}}</b>
         </div>
         <div>
-            작성일시: 2023-06-27 00:00:00
-            <button onclick="deleteComment('1')">삭제</button>
+            작성일시: {{dateString createdDt}} <!-- 6. 작성일시 -->
+            <button onclick="deleteComment('{{idx}}')">삭제</button>
         </div>
     </div>
     <div>
         <pre>{{comment}}</pre>
     </div>
+    {{/each}}
 </section>
 {{/with}}
 
