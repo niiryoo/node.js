@@ -165,3 +165,29 @@ app.post("/write-comment", async(req, res)=>{
     postService.updatePost(collection, id, post);
     return res.redirect(`/detail/${id}`);
 });
+
+app.delete('/delete-comment', async(req, res) => {
+    const {id, idx, password} = req.body;
+
+    // 1. 게시글(post)의 comments 안에 있는 특정 댓글 데이터를 찾기
+    const post = await collection.findOne(
+        {
+            _id: ObjectId(id),
+            comments: {$elemMatch: {idx: parseInt(idx), password}},
+            /**$elemMatch 연산자는 document 안에 있는 리스트에서 조건에 해당하는 데이터가 있으면
+             * document를 결괏값으로 주는 연산자.
+             */
+        },
+        postService.projectionOption,
+    );
+
+    // 2. 데이터가 없으면 isSuccess : false를 주면서 종료
+    if(!post){
+        return res.json({isSuccess: false});
+    }
+
+    // 3. 댓글 번호가 idx 이외인 것만 comments에 다시 할당 후 저장
+    post.comments = post.comments.filter((comment) => comment.idx != idx);
+    postService.updatePost(collection, id, post);
+    return res.json({isSuccess: true});
+});
