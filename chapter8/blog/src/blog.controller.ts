@@ -4,11 +4,8 @@ import { BlogService } from "./blog.service";
 
 @Controller('blog') // 2. 클래스에 붙이는 Controller 데코레이터, {서버 주소}/blog 이하의 요청을 처리한다라는 의미
 export class BlogController{
-    
-    blogService: BlogService;
-    constructor(){
-        this.blogService = new BlogService(); 
-        }
+
+    constructor(private blogService: BlogService){}
 
     @Get() // 3. Get 요청 처리
     getAllPosts(){
@@ -25,9 +22,12 @@ export class BlogController{
 
 
     @Get('/:id') // 6. GET에 URL 매개변수에 id가 있는 요청 처리
-    getPost(@Param('id') id: string){
+    async getPost(@Param('id') id: string){
         console.log(`게시글 하나 가져오기`);
-        return this.blogService.getPost(id);
+
+        const post = await this.blogService.getPost(id);
+        console.log(post);
+        return post;
     }
 
     @Delete('/:id') // 7. DELETE 방식에 URL 매개변수로 id가 있는 요청 처리
