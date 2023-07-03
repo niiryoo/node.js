@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { PostDto } from "./blog.model"; // 1. 게시글의 타입 정보 import
-import { BlogFileRepository, BlogRepository } from "./blog.repository";
+import { BlogMongoRepository } from "./blog.repository";
 
 @Injectable()
 export class BlogService { 
     
     // 1. 생성자를 통한 의존성 주입
-    constructor(private blogRepository: BlogFileRepository){}
+    constructor(private blogRepository: BlogMongoRepository){}
 
      async getAllPosts(){ // 3. 모든 게시글 가져오기
         return await this.blogRepository.getAllPost();
