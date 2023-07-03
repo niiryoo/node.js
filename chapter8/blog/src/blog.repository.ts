@@ -75,12 +75,12 @@ export class BlogMongoRepository implements BlogRepository{
 
     // 4. 게시글 작성
     async createPost(postDto: PostDto) {
-        const createdDt = {
+        const createPost = {
             ...postDto,
             createdDt: new Date(),
             updatedDt: new Date(),
         };
-        this.blogModel.create(this.createPost);
+        this.blogModel.create(createPost);
     }
 
     // 5. 하나의 게시글 읽기

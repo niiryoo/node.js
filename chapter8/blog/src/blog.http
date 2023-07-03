@@ -14,17 +14,17 @@ Content-Type: application/json
 }
 
 ### 특정 게시글 조회
-GET {{server}}blog/<게시글 ID>
+GET {{server}}/blog/64a25627d001d0b945cd01c4
 
 ### 게시글 삭제
-DELETE {{server}}/blog/<게시글 ID>
+DELETE {{server}}/blog/64a254267275b505b23ab45d
 
 ### 게시글 수정
-PUT {{server}}/blog/<게시글 ID>
+PUT {{server}}/blog/64a25627d001d0b945cd01c4
 Content-Type: application/json
 
 {
-    "title": "타이틀 수정3",
-    "content": "본문수정3",
+    "title": "test blog",
+    "content": "테스트 중 ",
     "name": "jiin.yoo"
 }
