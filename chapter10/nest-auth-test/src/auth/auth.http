@@ -7,3 +7,12 @@ Content-Type: application/json
     "password": "1234",
     "username" : "niiroov"
 }
+
+### 로그인
+POST http://localhost:3000/auth/login 
+Content-Type: application/json
+
+{
+    "email" : "niiroov@gmail.com",
+    "password": "1234"
+}

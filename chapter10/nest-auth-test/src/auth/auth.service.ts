@@ -34,4 +34,19 @@ export class AuthService {
         }
 
     }
+
+    async validatedUser(email: string, password: string){
+        const user = await this.userService.getUser(email);
+        if(!user){ // 유저가 없으면 검증 실패
+            return null;
+        }
+
+        const {password: hashedPassword, ...userInfo} = user;
+        // 패스워드를 따로 뽑아냄
+        if(bcrypt.compareSync(password, hashedPassword)){ // 패스워드가 일치하면 성공
+            return userInfo;
+        }
+
+        return null;
+    }
 }
