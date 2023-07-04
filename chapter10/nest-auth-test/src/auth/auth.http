@@ -1,0 +1,9 @@
+### 회원가입
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "niiroov@gmail.com",
+    "password": "1234",
+    "username" : "niiroov"
+}
