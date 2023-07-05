@@ -3,9 +3,9 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "niiroov@gmail.com",
-    "password": "1234",
-    "username" : "niiroov"
+    "email" : "andy3@podo.com",
+    "password" : "1234",
+    "username" : "andy"
 }
 
 ### 로그인
@@ -13,6 +13,18 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email" : "niiroov@gmail.com",
-    "password": "1234"
+    "email" : "andy1@podo.com",
+    "password" : "1234"
 }
+
+### 로그인 2: LoginGuard
+POST http://localhost:3000/auth/login2
+Content-Type: application/json
+
+{
+    "email" : "andy3@podo.com",
+    "password" : "123"
+}
+
+### Guard 테스트
+GET http://localhost:3000/auth/test-guard

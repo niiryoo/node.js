@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Request, Response } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, Response, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/user.dto';
 import { AuthService } from './auth.service';
+import { LoginGuard } from './auth.guard';
 
 @Controller('/auth') // 컨트롤러 생성
 export class AuthController {
@@ -20,6 +21,10 @@ export class AuthController {
             req.body.password,
         )
 
+        if(userInfo == undefined) // 유저 정보가 undefined로 회원가입하지 않았을 때
+          return res.send({message: 'login fail. 재시도 혹은 회원가입 부탁드립니다.'});
+        
+
         // 유저 정보가 있으면, 쿠키 정보를 Response에 저장
         if(userInfo){
             res.cookie('login', JSON.stringify(userInfo), {
@@ -30,4 +35,37 @@ export class AuthController {
 
         return res.send({message: 'login success'});
     }
+
+    @UseGuards(LoginGuard) //  ❶ LoginGuard 사용
+    @Post('/login2')
+    async login2(@Request() req, @Response() res) {
+      
+      console.log("login2/req.cookies['login'] : " + req.cookies['login']);
+      console.log("login2/userInfo : " + JSON.stringify(req.user));
+
+      if(req.user == undefined){
+       return res.send({ message: 'login2 fail.' });
+      }
+
+
+      if (req.user && !req.cookies['login']) {
+        // 응답에 쿠키 정보 추가
+        res.cookie('login', JSON.stringify(req.user), {
+          httpOnly: true,
+          // maxAge: 1000 * 60 * 60 * 24 * 7, // 1day
+          maxAge: 1000 * 10, // ❸ 로그인 테스트를 고려해 10초로 설정
+        });
+      }
+      
+      return res.send({ message: 'login2 success' });
+    }
+  
+    // ❹ 로그인을 한 때만 실행되는 메서드
+    @UseGuards(LoginGuard)
+    @Get('test-guard')
+    testGuard() {
+      return '로그인된 때에만 이 글이 보입니다.';
+    }
+
+
 }
