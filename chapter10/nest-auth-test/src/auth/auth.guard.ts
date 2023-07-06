@@ -60,6 +60,7 @@ export class GoogleAuthGuard extends AuthGuard('google'){ // Google Strategy 사
         const result = (await super.canActivate(context)) as boolean; //부모 클래스의 메서드 사용
 
         const request = context.switchToHttp().getRequest(); // context에서 request 객체를 꺼내
+        await super.logIn(request);
         return result;
         
     }
